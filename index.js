@@ -6,6 +6,7 @@ function searchMovie(){
         document.getElementById('search-result').innerHTML = 'Cannot Find Movie On Empty Search';
         return;
     }
+    document.getElementById('centered').style.display = 'block';
     fetch("https://www.omdbapi.com/?apikey=17553897&s="+key).then(function (response) {
         return response.json();
     }).then(function (data) {
@@ -21,8 +22,11 @@ function searchMovie(){
             design += '<a href="movies.html?id='+result[i].imdbID+'" class="m-10 btn" target="_blank">Details</a></div>';
         }
         document.getElementById('search-result').innerHTML = design;
+        document.getElementById('centered').style.display = 'none';
     }).catch(function (err) {
-        console.warn('Something went wrong.', err);
+        document.getElementById('centered').style.display = 'none';
+        document.getElementById('search-result').innerHTML = 'No Movie Found!';
+        
     });
     searchKey.push(key);
     document.cookie = "searchKey="+searchKey;
@@ -36,6 +40,7 @@ function detailed(){
         return;
     }
     id = id.split('=');
+    document.getElementById('centered').style.display = 'block';
     fetch("https://www.omdbapi.com/?apikey=17553897&i="+id[1]).then(function (response) {
         return response.json();
     }).then(function (data) {
@@ -45,6 +50,7 @@ function detailed(){
         design += '<div class="short-detail"><p>Released : '+detail.Released+'</p><p>Runtime : '+detail.Runtime+'</p><p>Genre : '+detail.Genre+'</p><p>Language : '+detail.Language+'</p><p>Director : '+detail.Director+'</p><p>IMDB Rating : '+detail.imdbRating+'</p></div>';
         design += '<div class="plot"> Description : <p>'+detail.Plot+'</p></div>';
         document.getElementById('detail-result').innerHTML = design;
+        document.getElementById('centered').style.display = 'none';
     }).catch(function (err) {
         console.warn('Something went wrong.', err);
     });
@@ -76,6 +82,7 @@ function favPage(){
     favList =  favList[1].split(',');
     let length = favList.length;
     if(favList[0] != ''){
+        document.getElementById('centered').style.display = 'block';
         for(let i=0; i<length; i++){
             fetch("https://www.omdbapi.com/?apikey=17553897&i="+favList[i]).then(function (response) {
             return response.json();
@@ -93,5 +100,6 @@ function favPage(){
                 console.warn('Something went wrong.', err);
             });
         }
+        document.getElementById('centered').style.display = 'none';
     }
 }

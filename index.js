@@ -102,7 +102,11 @@ function addFav(i){
         if(favList[1]){
             console.log('Movies Exits -----');
             favList = favList[1].split('=');
+            console.log('FavList Split with equal to ------');
+            console.log(favList);
             favList =  favList[1].split(',');
+            console.log('FavList Split with comma ------');
+            console.log(favList);
             movies = favList;
             console.log('Movies Assigned -----');
             console.log(movies);

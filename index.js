@@ -56,16 +56,18 @@ function detailed(){
 let movies = [];
 function addFav(i){
     let fav = document.getElementById('fav_'+i).value;
-    document.getElementById('favbtn_'+i).innerHTML = 'Added To Fav';
-    document.getElementById('favbtn_'+i).disabled = true;
     movies.push(fav);
     document.cookie = "movies="+movies;   
+    document.getElementById('favbtn_'+i).innerHTML = 'Added To Fav';
+    document.getElementById('favbtn_'+i).disabled = true;
 }
 
+// Remove Fav
 function removeFav(i){
     let remove = document.getElementById('remove_'+i).value;
     movies.pop(remove);
     document.cookie = "movies="+movies;   
+    favPage();
 }
 
 // Fav Page

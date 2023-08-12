@@ -1,6 +1,6 @@
 // Search Movie
-let searchKey = [];
 function searchMovie(){
+    let searchKey = [];
     let key = document.getElementById('search-box').value;
     if(key == ''){
         document.getElementById('search-result').innerHTML = 'Cannot Find Movie On Empty Search';
@@ -28,42 +28,43 @@ function searchMovie(){
         document.getElementById('search-result').innerHTML = 'No Movie Found!';
         
     });
-    // let datalist = document.cookie;
-    // if(datalist != ''){
-    //     datalist = datalist.split(';');
-    //     if(datalist[0]){
-    //         datalist = datalist[0].split('=');
-    //         datalist =  datalist[0].split(',');
-    //         searchKey = datalist
-    //         searchKey.push(key);
-    //     }
-    //     else{
-    //         searchKey.push(key);
-    //     }
-    // }else{
-    //     searchKey.push(key);
-    // }
-    searchKey.push(key);
+    let datalist = document.cookie;
+    if(datalist != ''){
+        datalist = datalist.split(';');
+        let index =  cookieIndex(datalist, 'searchKey');
+        if(index !== undefined){
+            datalist = datalist[index].split('=');
+            datalist =  datalist[1].split(',');
+            searchKey = datalist
+            searchKey.push(key);
+        }
+        else{
+            searchKey.push(key);
+        }
+    }else{
+        searchKey.push(key);
+    }
     document.cookie = "searchKey="+searchKey;
 }
 
 // Suggestion
 suggestion();
 function suggestion(){
-    // let suggest = document.cookie;
-    // if(suggest != ''){
-    //     suggest = suggest.split(';');
-    //     if(suggest[0]){
-    //         suggest = suggest[0].split('=');
-    //         suggest =  suggest[0].split(',');
-    //         let length = suggest.length;
-    //         let suggestInput = '';
-    //         for(let i=0; i<length; i++){
-    //             suggestInput += '<option value"'+suggest[i]+'">'
-    //         }
-    //         document.getElementById('suggest').innerHTML = suggest;
-    //     }
-    // }
+    let suggest = document.cookie;
+    if(suggest != ''){
+        suggest = suggest.split(';');
+        let index =  cookieIndex(suggest, 'searchKey');
+        if(index !== undefined){
+            suggest = suggest[index].split('=');
+            suggest =  suggest[1].split(',');
+            let length = suggest.length;
+            let suggestInput = '';
+            for(let i=0; i<length; i++){
+                suggestInput += '<option value="'+suggest[i]+'">'
+            }
+            document.getElementById('suggest').innerHTML = suggestInput;
+        }
+    }
 }
 
 // Detailed View of Movie
@@ -90,6 +91,16 @@ function detailed(){
     });
 }
 
+// Finding Cookies
+function cookieIndex(cookies, cookieName){
+    for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        
+        if (cookie.startsWith(cookieName + '=')) {
+          return i;
+        }
+      }
+}
 
 // Add To Favourite
 function addFav(i){
@@ -97,63 +108,53 @@ function addFav(i){
     let fav = document.getElementById('fav_'+i).value;
     let favList = document.cookie;
     if(favList != ''){
-        console.log('favList Exits -----');
         favList = favList.split(';');
-        if(favList[1]){
-            console.log('Movies Exits -----');
-            favList = favList[1].split('=');
-            console.log('FavList Split with equal to ------');
-            console.log(favList);
+        let index =  cookieIndex(favList, 'movies');
+        if(index !== undefined){
+            favList = favList[index].split('=');
             favList =  favList[1].split(',');
-            console.log('FavList Split with comma ------');
-            console.log(favList);
             movies = favList;
-            console.log('Movies Assigned -----');
-            console.log(movies);
             movies.push(fav);
-            console.log('Movies Pushed -----');
-            console.log(movies);
         }
         else{
             movies.push(fav);
-            console.log('Movies Not Exits -----');
-            console.log('Movies Assigned -----');
-            console.log(movies);
         }
     }
     else{
-        console.log('Cookie Not Exist -----');
         movies.push(fav);
-        console.log('Movies Pushed -----');
-        console.log(movies);
     }
     document.cookie = "movies="+movies;   
     document.getElementById('favbtn_'+i).innerHTML = 'Added To Fav';
     document.getElementById('favbtn_'+i).disabled = true;
 }
 
-// Remove Fav
+// Remove Favourite
 function removeFav(i){
     let remove = document.getElementById('remove_'+i).value;
     let favList = document.cookie;
     favList = favList.split(';');
-    favList = favList[1].split('=');
-    favList =  favList[1].split(',');
-    favList = delete favList[remove];
-    document.cookie = "movies="+favList;   
-    favPage();
+    let index = cookieIndex(favList, 'movies');
+    if(index !== undefined){
+        favList = favList[index].split('=');
+        favList =  favList[1].split(',');
+        favList = favList.filter(item => item !== remove);
+        document.cookie = "movies="+favList;   
+        window.location.reload();
+    }
+    
 }
 
-// Fav Page
+// Favourite Page
 function favPage(){
     let favList = document.cookie;
     favList = favList.split(';');
     favList = favList[1].split('=');
     favList =  favList[1].split(',');
     let length = favList.length;
-    if(favList[0] != ''){
-        document.getElementById('centered').style.display = 'block';
-        for(let i=0; i<length; i++){
+    document.getElementById('centered').style.display = 'block';
+    
+    for(let i=0; i<length; i++){
+        if(favList[i] != ''){
             fetch("https://www.omdbapi.com/?apikey=17553897&i="+favList[i]).then(function (response) {
             return response.json();
             }).then(function (data) {
@@ -170,6 +171,7 @@ function favPage(){
                 console.warn('Something went wrong.', err);
             });
         }
-        document.getElementById('centered').style.display = 'none';
     }
+
+    document.getElementById('centered').style.display = 'none';
 }

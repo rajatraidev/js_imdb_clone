@@ -91,8 +91,8 @@ function detailed(){
 
 
 // Add To Favourite
-let movies = [];
 function addFav(i){
+    let movies = [];
     let fav = document.getElementById('fav_'+i).value;
     let favList = document.cookie;
     if(favList != ''){

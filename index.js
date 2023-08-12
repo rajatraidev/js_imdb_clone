@@ -80,10 +80,11 @@ function favPage(){
             design += '<input type="text" hidden id="fav_'+i+'" value="'+result.imdbID+'">';
             design += '<button class="btn m-10" onclick="addFav('+i+')">Add To Favourite</button>';
             design += '<a href="movies.html?id='+result.imdbID+'" class="m-10 btn">Details</a></div>';
+            document.getElementById('fav-result').innerHTML += design;
         }).catch(function (err) {
             console.warn('Something went wrong.', err);
         });
         
     }
-    document.getElementById('fav-result').innerHTML = design;
+    console.log(design);
 }

@@ -44,7 +44,7 @@ function searchMovie(){
     }else{
         searchKey.push(key);
     }
-    document.cookie = "searchKey="+searchKey;
+    document.cookie = "searchKey="+searchKey+";expires=Fri, 31 Dec 9999 21:10:10 GMT"
 }
 
 // Suggestion
@@ -123,7 +123,7 @@ function addFav(i){
     else{
         movies.push(fav);
     }
-    document.cookie = "movies="+movies;   
+    document.cookie = "movies="+movies+";expires=Fri, 31 Dec 9999 21:10:10 GMT";   
     document.getElementById('favbtn_'+i).innerHTML = 'Added To Fav';
     document.getElementById('favbtn_'+i).disabled = true;
 }
@@ -138,7 +138,7 @@ function removeFav(i){
         favList = favList[index].split('=');
         favList =  favList[1].split(',');
         favList = favList.filter(item => item !== remove);
-        document.cookie = "movies="+favList;   
+        document.cookie = "movies="+favList+";expires=Fri, 31 Dec 9999 21:10:10 GMT";  
         window.location.reload();
     }
     

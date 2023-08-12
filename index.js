@@ -68,21 +68,22 @@ function favPage(){
     favList = favList[1].split('=');
     favList =  favList[1].split(',');
     let length = favList.length;
+    let design = '';
     for(let i=0; i<length; i++){
         fetch("https://www.omdbapi.com/?apikey=17553897&i="+favList[i]).then(function (response) {
         return response.json();
         }).then(function (data) {
             let result = data;
-            let design = '';
             design += '<div class="search-result-box">';
             design += '<img src="'+result.Poster+'">';
             design += '<h3>'+result.Title+'</h3>';
             design += '<input type="text" hidden id="fav_'+i+'" value="'+result.imdbID+'">';
             design += '<button class="btn m-10" onclick="addFav('+i+')">Add To Favourite</button>';
             design += '<a href="movies.html?id='+result.imdbID+'" class="m-10 btn">Details</a></div>';
-            document.getElementById('fav-result').innerHTML += design;
         }).catch(function (err) {
             console.warn('Something went wrong.', err);
         });
+        
     }
+    document.getElementById('fav-result').innerHTML = design;
 }

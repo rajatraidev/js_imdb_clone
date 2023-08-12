@@ -31,7 +31,7 @@ function searchMovie(){
     let datalist = document.cookie;
     if(datalist != ''){
         datalist = datalist.split(';');
-        if(datalist[0] && datalist[0] == 'searchKey'){
+        if(datalist[0]){
             datalist = datalist[0].split('=');
             datalist =  datalist[0].split(',');
             searchKey = datalist
@@ -97,7 +97,7 @@ function addFav(i){
     let favList = document.cookie;
     if(favList != ''){
         favList = favList.split(';');
-        if(favList[1] && favList[1] == 'movies'){
+        if(favList[1]){
             favList = favList[1].split('=');
             favList =  favList[1].split(',');
             movies = favList;

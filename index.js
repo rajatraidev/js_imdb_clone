@@ -28,41 +28,42 @@ function searchMovie(){
         document.getElementById('search-result').innerHTML = 'No Movie Found!';
         
     });
-    let datalist = document.cookie;
-    if(datalist != ''){
-        datalist = datalist.split(';');
-        if(datalist[0]){
-            datalist = datalist[0].split('=');
-            datalist =  datalist[0].split(',');
-            searchKey = datalist
-            searchKey.push(key);
-        }
-        else{
-            searchKey.push(key);
-        }
-    }else{
-        searchKey.push(key);
-    }
+    // let datalist = document.cookie;
+    // if(datalist != ''){
+    //     datalist = datalist.split(';');
+    //     if(datalist[0]){
+    //         datalist = datalist[0].split('=');
+    //         datalist =  datalist[0].split(',');
+    //         searchKey = datalist
+    //         searchKey.push(key);
+    //     }
+    //     else{
+    //         searchKey.push(key);
+    //     }
+    // }else{
+    //     searchKey.push(key);
+    // }
+    searchKey.push(key);
     document.cookie = "searchKey="+searchKey;
 }
 
 // Suggestion
 suggestion();
 function suggestion(){
-    let suggest = document.cookie;
-    if(suggest != ''){
-        suggest = suggest.split(';');
-        if(suggest[0]){
-            suggest = suggest[0].split('=');
-            suggest =  suggest[0].split(',');
-            let length = suggest.length;
-            let suggestInput = '';
-            for(let i=0; i<length; i++){
-                suggestInput += '<option value"'+suggest[i]+'">'
-            }
-            document.getElementById('suggest').innerHTML = suggest;
-        }
-    }
+    // let suggest = document.cookie;
+    // if(suggest != ''){
+    //     suggest = suggest.split(';');
+    //     if(suggest[0]){
+    //         suggest = suggest[0].split('=');
+    //         suggest =  suggest[0].split(',');
+    //         let length = suggest.length;
+    //         let suggestInput = '';
+    //         for(let i=0; i<length; i++){
+    //             suggestInput += '<option value"'+suggest[i]+'">'
+    //         }
+    //         document.getElementById('suggest').innerHTML = suggest;
+    //     }
+    // }
 }
 
 // Detailed View of Movie
@@ -96,19 +97,31 @@ function addFav(i){
     let fav = document.getElementById('fav_'+i).value;
     let favList = document.cookie;
     if(favList != ''){
+        console.log('favList Exits -----');
         favList = favList.split(';');
         if(favList[1]){
+            console.log('Movies Exits -----');
             favList = favList[1].split('=');
             favList =  favList[1].split(',');
             movies = favList;
+            console.log('Movies Assigned -----');
+            console.log(movies);
             movies.push(fav);
+            console.log('Movies Pushed -----');
+            console.log(movies);
         }
         else{
             movies.push(fav);
+            console.log('Movies Not Exits -----');
+            console.log('Movies Assigned -----');
+            console.log(movies);
         }
     }
     else{
+        console.log('Cookie Not Exist -----');
         movies.push(fav);
+        console.log('Movies Pushed -----');
+        console.log(movies);
     }
     document.cookie = "movies="+movies;   
     document.getElementById('favbtn_'+i).innerHTML = 'Added To Fav';
@@ -122,7 +135,7 @@ function removeFav(i){
     favList = favList.split(';');
     favList = favList[1].split('=');
     favList =  favList[1].split(',');
-    delete favList[remove];
+    favList = delete favList[remove];
     document.cookie = "movies="+favList;   
     favPage();
 }

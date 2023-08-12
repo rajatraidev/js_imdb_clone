@@ -17,8 +17,8 @@ function searchMovie(){
             design += '<img src="'+result[i].Poster+'">';
             design += '<h3>'+result[i].Title+'</h3>';
             design += '<input type="text" hidden id="fav_'+i+'" value="'+result[i].imdbID+'">';
-            design += '<button class="btn m-10" onclick="addFav('+i+')">Add To Favourite</button>';
-            design += '<a href="movies.html?id='+result[i].imdbID+'" class="m-10 btn">Details</a></div>';
+            design += '<button class="btn m-10" onclick="addFav('+i+')" id="favbtn_'+i+'">Add To Favourite</button>';
+            design += '<a href="movies.html?id='+result[i].imdbID+'" class="m-10 btn" target="_blank">Details</a></div>';
         }
         document.getElementById('search-result').innerHTML = design;
     }).catch(function (err) {
@@ -55,10 +55,17 @@ function detailed(){
 // Add To Favourite
 let movies = [];
 function addFav(i){
-    console.log(i);
     let fav = document.getElementById('fav_'+i).value;
+    document.getElementById('favbtn_'+i).innerHTML = 'Added To Fav';
+    document.getElementById('favbtn_'+i).disabled = true;
     movies.push(fav);
-    document.cookie = "movies="+movies;
+    document.cookie = "movies="+movies;   
+}
+
+function removeFav(i){
+    let remove = document.getElementById('remove_'+i).value;
+    movies.pop(remove);
+    document.cookie = "movies="+movies;   
 }
 
 // Fav Page
@@ -68,23 +75,21 @@ function favPage(){
     favList = favList[1].split('=');
     favList =  favList[1].split(',');
     let length = favList.length;
-    let design = '';
     for(let i=0; i<length; i++){
         fetch("https://www.omdbapi.com/?apikey=17553897&i="+favList[i]).then(function (response) {
         return response.json();
         }).then(function (data) {
             let result = data;
+            let design = '';
             design += '<div class="search-result-box">';
             design += '<img src="'+result.Poster+'">';
             design += '<h3>'+result.Title+'</h3>';
-            design += '<input type="text" hidden id="fav_'+i+'" value="'+result.imdbID+'">';
-            design += '<button class="btn m-10" onclick="addFav('+i+')">Add To Favourite</button>';
-            design += '<a href="movies.html?id='+result.imdbID+'" class="m-10 btn">Details</a></div>';
+            design += '<input type="text" hidden id="remove_'+i+'" value="'+result.imdbID+'">';
+            design += '<button class="btn m-10" onclick="removeFav('+i+')">Remove</button>';
+            design += '<a href="movies.html?id='+result.imdbID+'" class="m-10 btn" target="_blank">Details</a></div>';
             document.getElementById('fav-result').innerHTML += design;
         }).catch(function (err) {
             console.warn('Something went wrong.', err);
         });
-        
     }
-    console.log(design);
 }

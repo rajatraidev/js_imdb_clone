@@ -17,7 +17,7 @@ function searchMovie(){
             design += '<img src="'+result[i].Poster+'">';
             design += '<h3>'+result[i].Title+'</h3>';
             design += '<input type="text" hidden id="fav_'+i+'" value="'+result[i].imdbID+'">';
-            design += '<button class="btn m-10" onclick="addFav('+i+')" id="favbtn_'+i+'">Add To Favourite</button>';
+            design += '<a class="btn m-10" onclick="addFav('+i+')" id="favbtn_'+i+'">Add To Favourite</a>';
             design += '<a href="movies.html?id='+result[i].imdbID+'" class="m-10 btn" target="_blank">Details</a></div>';
         }
         document.getElementById('search-result').innerHTML = design;
@@ -39,9 +39,7 @@ function detailed(){
     fetch("https://www.omdbapi.com/?apikey=17553897&i="+id[1]).then(function (response) {
         return response.json();
     }).then(function (data) {
-        console.log(data);
         let detail = data;
-
         let design = '<h2>'+detail.Title+'</h2>';
         design += '<img src="'+detail.Poster+'">';
         design += '<div class="short-detail"><p>Released : '+detail.Released+'</p><p>Runtime : '+detail.Runtime+'</p><p>Genre : '+detail.Genre+'</p><p>Language : '+detail.Language+'</p><p>Director : '+detail.Director+'</p><p>IMDB Rating : '+detail.imdbRating+'</p></div>';
@@ -65,7 +63,7 @@ function addFav(i){
 // Remove Fav
 function removeFav(i){
     let remove = document.getElementById('remove_'+i).value;
-    movies.pop(remove);
+    movies.remove(remove);
     document.cookie = "movies="+movies;   
     favPage();
 }
@@ -77,21 +75,23 @@ function favPage(){
     favList = favList[1].split('=');
     favList =  favList[1].split(',');
     let length = favList.length;
-    for(let i=0; i<length; i++){
-        fetch("https://www.omdbapi.com/?apikey=17553897&i="+favList[i]).then(function (response) {
-        return response.json();
-        }).then(function (data) {
-            let result = data;
-            let design = '';
-            design += '<div class="search-result-box">';
-            design += '<img src="'+result.Poster+'">';
-            design += '<h3>'+result.Title+'</h3>';
-            design += '<input type="text" hidden id="remove_'+i+'" value="'+result.imdbID+'">';
-            design += '<button class="btn m-10" onclick="removeFav('+i+')">Remove</button>';
-            design += '<a href="movies.html?id='+result.imdbID+'" class="m-10 btn" target="_blank">Details</a></div>';
-            document.getElementById('fav-result').innerHTML += design;
-        }).catch(function (err) {
-            console.warn('Something went wrong.', err);
-        });
+    if(favList[0] != ''){
+        for(let i=0; i<length; i++){
+            fetch("https://www.omdbapi.com/?apikey=17553897&i="+favList[i]).then(function (response) {
+            return response.json();
+            }).then(function (data) {
+                let result = data;
+                let design = '';
+                design += '<div class="search-result-box">';
+                design += '<img src="'+result.Poster+'">';
+                design += '<h3>'+result.Title+'</h3>';
+                design += '<input type="text" hidden id="remove_'+i+'" value="'+result.imdbID+'">';
+                design += '<a class="btn m-10" onclick="removeFav('+i+')">Remove</a>';
+                design += '<a href="movies.html?id='+result.imdbID+'" class="m-10 btn" target="_blank">Details</a></div>';
+                document.getElementById('fav-result').innerHTML += design;
+            }).catch(function (err) {
+                console.warn('Something went wrong.', err);
+            });
+        }
     }
 }

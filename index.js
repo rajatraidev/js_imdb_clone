@@ -63,7 +63,7 @@ function addFav(i){
 // Remove Fav
 function removeFav(i){
     let remove = document.getElementById('remove_'+i).value;
-    movies.remove(remove);
+    movies.splice(remove,1);
     document.cookie = "movies="+movies;   
     favPage();
 }

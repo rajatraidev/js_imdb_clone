@@ -63,9 +63,13 @@ function addFav(i){
 
 // Fav Page
 function favPage(){
-    let length = movies.length;
+    let favList = document.cookie;
+    favList = favList.split(';');
+    favList = favList[1].split('=');
+    favList =  favList[1].split(',');
+    let length = favList.length;
     for(let i=0; i<length; i++){
-        fetch("https://www.omdbapi.com/?apikey=17553897&i="+movies[i]).then(function (response) {
+        fetch("https://www.omdbapi.com/?apikey=17553897&i="+favList[i]).then(function (response) {
         return response.json();
         }).then(function (data) {
             let result = data;

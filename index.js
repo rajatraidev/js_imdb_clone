@@ -28,22 +28,41 @@ function searchMovie(){
         document.getElementById('search-result').innerHTML = 'No Movie Found!';
         
     });
-    searchKey.push(key);
+    let datalist = document.cookie;
+    if(datalist != ''){
+        datalist = datalist.split(';');
+        if(datalist[0] && datalist[0] == 'searchKey'){
+            datalist = datalist[0].split('=');
+            datalist =  datalist[0].split(',');
+            searchKey = datalist
+            searchKey.push(key);
+        }
+        else{
+            searchKey.push(key);
+        }
+    }else{
+        searchKey.push(key);
+    }
     document.cookie = "searchKey="+searchKey;
 }
 
 // Suggestion
+suggestion();
 function suggestion(){
     let suggest = document.cookie;
-    suggest = suggest.split(';');
-    suggest = suggest[0].split('=');
-    suggest =  suggest[0].split(',');
-    let length = suggest.length;
-    let suggestInput = '';
-    for(let i=0; i<length; i++){
-        suggestInput += '<option value"'+suggest[i]+'">'
+    if(suggest != ''){
+        suggest = suggest.split(';');
+        if(suggest[0]){
+            suggest = suggest[0].split('=');
+            suggest =  suggest[0].split(',');
+            let length = suggest.length;
+            let suggestInput = '';
+            for(let i=0; i<length; i++){
+                suggestInput += '<option value"'+suggest[i]+'">'
+            }
+            document.getElementById('suggest').innerHTML = suggest;
+        }
     }
-    document.getElementById('suggest').innerHTML = suggest;
 }
 
 // Detailed View of Movie
@@ -78,7 +97,7 @@ function addFav(i){
     let favList = document.cookie;
     if(favList != ''){
         favList = favList.split(';');
-        if(favList[1]){
+        if(favList[1] && favList[1] == 'movies'){
             favList = favList[1].split('=');
             favList =  favList[1].split(',');
             movies = favList;

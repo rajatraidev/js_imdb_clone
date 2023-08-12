@@ -6,7 +6,7 @@ function searchMovie(){
         document.getElementById('search-result').innerHTML = 'Cannot Find Movie On Empty Search';
         return;
     }
-    fetch("https://www.omdbapi.com/?apikey=17553897&s="+key).then(function (response) {
+    fetch("http://www.omdbapi.com/?apikey=17553897&s="+key).then(function (response) {
         return response.json();
     }).then(function (data) {
         let result = data.Search;
@@ -36,7 +36,7 @@ function detailed(){
         return;
     }
     id = id.split('=');
-    fetch("https://www.omdbapi.com/?apikey=17553897&i="+id[1]).then(function (response) {
+    fetch("http://www.omdbapi.com/?apikey=17553897&i="+id[1]).then(function (response) {
         return response.json();
     }).then(function (data) {
         console.log(data);
@@ -65,7 +65,7 @@ function addFav(i){
 function favPage(){
     let length = movies.length;
     for(let i=0; i<length; i++){
-        fetch("https://www.omdbapi.com/?apikey=17553897&i="+movies[i]).then(function (response) {
+        fetch("http://www.omdbapi.com/?apikey=17553897&i="+movies[i]).then(function (response) {
         return response.json();
         }).then(function (data) {
             let result = data;
